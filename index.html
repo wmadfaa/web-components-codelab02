@@ -1,63 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Static Template</title>
-  </head>
-  <script type="module">
-    import { LitElement, html } from "https://unpkg.com/lit-element?module";
 
-    const author = "Wasim Almadfaa";
-    const github_account = "https://github.com/wmadfaa";
-    const footerTemplate = html`
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Static Template</title>
+</head>
+<script type="module">
+  import { LitElement, html } from "https://unpkg.com/lit-element?module";
+
+  const author = "Wasim Almadfaa";
+  const github_account = "https://github.com/wmadfaa";
+  const footerTemplate = html`
       <footer>
         Made with love by
         <a href=${github_account}>${author}</a>
       </footer>
     `;
 
-    class TodoApp extends LitElement {
-      constructor() {
-        super();
+  class TodoApp extends LitElement {
+    constructor() {
+      super();
 
-        this._todos = [
-          { text: "Do A", finished: true },
-          { text: "Do B", finished: false },
-          { text: "Do C", finished: false }
-        ];
-      }
+      this._todos = [
+        { text: "Do A", finished: true },
+        { text: "Do B", finished: false },
+        { text: "Do C", finished: false }
+      ];
+    }
 
-      static get properties() {
-        return {
-          todos: { type: Array }
-        };
-      }
+    static get properties() {
+      return {
+        todos: { type: Array }
+      };
+    }
 
-      set todos(newTodos) {
-        if (this._todos === newTodos) return;
-        this._todos = newTodos;
+    set todos(newTodos) {
+      if (this._todos === newTodos) return;
+      this._todos = newTodos;
 
-        this.requestUpdate();
-      }
+      this.requestUpdate();
+    }
 
-      get todos() {
-        return this._todos;
-      }
+    get todos() {
+      return this._todos;
+    }
 
-      _addTodo() {
-        const input = this.shadowRoot.getElementById("addTodoInput");
-        const text = input.value;
-        input.value = "";
+    _addTodo() {
+      const input = this.shadowRoot.getElementById("addTodoInput");
+      const text = input.value;
+      input.value = "";
 
-        this.todos = [...this.todos, { text, finished: false }];
+      this.todos = [...this.todos, { text, finished: false }];
 
-        this.requestUpdate();
-      }
+      this.requestUpdate();
+    }
 
-      render() {
-        return html`
+    _removeElement(todo) {
+      this.todos = this.todos.filter(e => e !== todo)
+    }
+
+    render() {
+      return html`
           <h1>Todo App</h1>
 
           <input type="text" id="addTodoInput" placeholder="add todo" />
@@ -65,22 +70,25 @@
 
           <ol>
             ${this.todos.map(
-              todo =>
-                html`
+        todo =>
+          html`
                   <li>
                     ${todo.text} (${todo.finished ? "Finished" : "UnFinished"})
+                    <button @click="${() => this._removeElement(todo)}">X</button>
                   </li>
                 `
-            )}
+      )}
           </ol>
 
           ${footerTemplate}
         `;
-      }
     }
-    customElements.define("todo-app", TodoApp);
-  </script>
-  <body>
-    <todo-app></todo-app>
-  </body>
+  }
+  customElements.define("todo-app", TodoApp);
+</script>
+
+<body>
+  <todo-app></todo-app>
+</body>
+
 </html>
