@@ -1,10 +1,28 @@
-import { LitElement, html } from "https://unpkg.com/lit-element?module";
+import { LitElement, html, css } from "https://unpkg.com/lit-element?module";
 
 class TodosList extends LitElement {
   static get properties() {
     return {
       todos: { type: Array },
     };
+  }
+
+  static get styles() {
+    return css`
+      :host {
+        color: blue;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      button {
+        background-color: transparent;
+        border: none;
+      }
+    `;
   }
 
   render() {
